@@ -32,7 +32,7 @@ resource "azurerm_api_management" "apim" {
   sku_name = "Developer_1"
 }
 
-resource "azurerm_api_manamgent_product" "product" {
+resource "azurerm_api_management_product" "product" {
   product_id            = "crud"
   api_management_name   = azurerm_api_management.apim.name
   resource_group_name   = azurerm_api_management.apim.resource_group_name
@@ -54,15 +54,15 @@ resource "azurerm_api_management_api" "api" {
 }
 
 resource "azurerm_api_management_product_api" "protudctToApi" {
-  api_name            = azurerm_api_management.api.name
-  product_id          = azurerm_api_management.product.product_id
+  api_name            = azurerm_api_management_api.api.name
+  product_id          = azurerm_api_management_product.product.product_id
   api_management_name = azurerm_api_management.apim.name
   resource_group_name   = azurerm_api_management.apim.resource_group_name
 }
 
-resource "azurerm_api_managment_operation" "op" {
+resource "azurerm_api_management_api_operation" "op" {
   operation_id        = "set-value"
-  api_name            = azurerm_api_management.api.name
+  api_name            = azurerm_api_management_api.api.name
   api_management_name = azurerm_api_management.apim.name
   resource_group_name   = azurerm_api_management.apim.resource_group_name
   display_name        = "Set a value"
