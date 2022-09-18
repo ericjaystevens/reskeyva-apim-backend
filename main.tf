@@ -38,7 +38,6 @@ resource "azurerm_api_management_product" "product" {
   resource_group_name   = azurerm_api_management.apim.resource_group_name
   display_name          = "crud"
   subscription_required = false
-  approval_required     = true
   published             = true
 }
 
