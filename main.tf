@@ -66,7 +66,13 @@ resource "azurerm_api_management_api_operation" "op" {
   resource_group_name   = azurerm_api_management.apim.resource_group_name
   display_name        = "Set a value"
   method              = "POST"
-  url_template        = "/reskeyva/{key}"
+  url_template        = "/reskeyva/{key}/"
+  template_parameter  {
+    name = "key"
+    required = true
+    type = "string"
+  }
+
   description         = "set a key value"
 
   response {
