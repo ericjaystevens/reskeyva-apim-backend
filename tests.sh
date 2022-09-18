@@ -1,0 +1,1 @@
+curl https://crud-apim.azure-api.net/reskeyva/reskeyva/1234/

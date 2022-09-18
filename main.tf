@@ -59,6 +59,10 @@ resource "azurerm_api_management_product_api" "protudctToApi" {
   resource_group_name   = azurerm_api_management.apim.resource_group_name
 }
 
+data "template_file" "op_policy" {
+  template = "${file("${path.module}/set-policy.xml")}"
+}
+
 resource "azurerm_api_management_api_operation" "op" {
   operation_id        = "set-value"
   api_name            = azurerm_api_management_api.api.name
@@ -66,7 +70,7 @@ resource "azurerm_api_management_api_operation" "op" {
   resource_group_name   = azurerm_api_management.apim.resource_group_name
   display_name        = "Set a value"
   method              = "POST"
-  url_template        = "/reskeyva/{key}/"
+  url_template        = "/{key}/"
   template_parameter  {
     name = "key"
     required = true
@@ -78,4 +82,14 @@ resource "azurerm_api_management_api_operation" "op" {
   response {
     status_code = 200
   } 
+}
+
+resource "azurerm_api_management_api_operation_policy" "example" {
+  api_name            = azurerm_api_management_api_operation.op.api_name
+  api_management_name = azurerm_api_management_api_operation.op.api_management_name
+  resource_group_name = azurerm_api_management_api_operation.op.resource_group_name
+  operation_id        = azurerm_api_management_api_operation.op.operation_id
+
+  xml_content = data.template_file.op_policy.rendered
+
 }
