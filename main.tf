@@ -24,7 +24,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_api_management" "apim" {
-  name                = "example-apim"
+  name                = "crud-apim"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   publisher_name      = "demo god"
