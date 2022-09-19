@@ -110,3 +110,16 @@ resource "azurerm_storage_table" "table" {
   name                 = "reskeyva"
   storage_account_name = azurerm_storage_account.sa.name
 }
+
+
+resource "azurerm_role_assignment" "apim_reader" {
+  scope              = azurerm_storage_account.sa.id
+  role_definition_name = "Reader"
+  principal_id       = azurerm_api_management.apim.identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "apim_table" {
+  scope              = azurerm_storage_account.sa.id
+  role_definition_name = "Storage Table Data Contributor"
+  principal_id       = azurerm_api_management.apim.identity[0].principal_id
+}
