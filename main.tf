@@ -30,6 +30,10 @@ resource "azurerm_api_management" "apim" {
   publisher_name      = "demo god"
   publisher_email = "ericjaystevens+demogod@gmail.com"
   sku_name = "Developer_1"
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 resource "azurerm_api_management_product" "product" {
