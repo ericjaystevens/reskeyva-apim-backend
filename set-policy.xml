@@ -6,18 +6,30 @@
             <set-url>https://sareskeyva.table.core.windows.net/reskeyva</set-url>
             <set-method>POST</set-method>
             <set-header name="x-ms-date" exists-action="override">
-                <value>@(DateTime.Now.ToString())</value>
+                <value>@(DateTime.UtcNow.ToString("R"))</value>
             </set-header>
             <set-header name="Content-Type" exists-action="override">
                 <value>application/json</value>
             </set-header>
-            <set-header name="x-ms-version">
-                <value>2017-11-09</value>
+            <set-header name="x-ms-version" exists-action="override">
+                <value>2020-04-08</value>
+            </set-header>
+            <set-header name="Accept" exists-action="override">
+                <value>application/json;odata=minimalmetadata</value>
             </set-header>
             <set-body>{  
-            "value":"my1Val"
-            "PartitionKey":"mypartitionkey",  
-            "RowKey":"myrowkey"  
+                "Address":"Mountain View",  
+                "Age":23,  
+                "AmountDue":200.23,  
+                "CustomerCode@odata.type":"Edm.Guid",  
+                "CustomerCode":"c9da6455-213d-42c9-9a79-3e9149a57833",  
+                "CustomerSince@odata.type":"Edm.DateTime",  
+                "CustomerSince":"2008-07-10T00:00:00",  
+                "IsActive":true,  
+                "NumberOfOrders@odata.type":"Edm.Int64",  
+                "NumberOfOrders":"255",  
+                "PartitionKey":"mypartitionkey",  
+                "RowKey":"myrowkey"  
             }</set-body>
             <authentication-managed-identity resource="https://storage.azure.com/" />
         </send-request>
