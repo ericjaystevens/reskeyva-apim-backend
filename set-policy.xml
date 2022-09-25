@@ -1,47 +1,42 @@
 <policies>
-    <inbound>
-        <base />
-        <set-variable name="bodySize" value="@(context.Request.Headers["Content-Length"][0])" />
-        <send-request mode="new" response-variable-name="updateResponse">
-            <set-url>https://sareskeyva.table.core.windows.net/reskeyva</set-url>
-            <set-method>POST</set-method>
-            <set-header name="x-ms-date" exists-action="override">
-                <value>@(DateTime.UtcNow.ToString("R"))</value>
-            </set-header>
-            <set-header name="Content-Type" exists-action="override">
-                <value>application/json</value>
-            </set-header>
-            <set-header name="x-ms-version" exists-action="override">
-                <value>2020-04-08</value>
-            </set-header>
-            <set-header name="Accept" exists-action="override">
-                <value>application/json;odata=minimalmetadata</value>
-            </set-header>
-            <set-body>{  
-                "Address":"Mountain View",  
-                "Age":23,  
-                "AmountDue":200.23,  
-                "CustomerCode@odata.type":"Edm.Guid",  
-                "CustomerCode":"c9da6455-213d-42c9-9a79-3e9149a57833",  
-                "CustomerSince@odata.type":"Edm.DateTime",  
-                "CustomerSince":"2008-07-10T00:00:00",  
-                "IsActive":true,  
-                "NumberOfOrders@odata.type":"Edm.Int64",  
-                "NumberOfOrders":"255",  
-                "PartitionKey":"mypartitionkey",  
-                "RowKey":"myrowkey"  
+	<inbound>
+		<base />
+		<set-variable name="req" value="@{
+            JObject body = context.Request.Body.As<JObject>(); 
+            return body["value"]; 
+        }" />
+		<set-variable name="key" value="@((string)context.Request.MatchedParameters["key"])" />
+		<send-request mode="new" response-variable-name="updateResponse">
+			<set-url>https://sareskeyva.table.core.windows.net/reskeyva</set-url>
+			<set-method>POST</set-method>
+			<set-header name="x-ms-date" exists-action="override">
+				<value>@(DateTime.UtcNow.ToString("R"))</value>
+			</set-header>
+			<set-header name="Content-Type" exists-action="override">
+				<value>application/json</value>
+			</set-header>
+			<set-header name="x-ms-version" exists-action="override">
+				<value>2020-04-08</value>
+			</set-header>
+			<set-header name="Accept" exists-action="override">
+				<value>application/json;odata=minimalmetadata</value>
+			</set-header>
+			<set-body template="liquid">{  
+                "value": "{{context.Variables["req"]}}",
+                "PartitionKey": "{{context.Variables["key"]}}",  
+                "RowKey": "{{context.Variables["key"]}}"
             }</set-body>
-            <authentication-managed-identity resource="https://storage.azure.com/" />
-        </send-request>
-        <mock-response status-code="200" content-type="application/json" />
-    </inbound>
-    <backend>
-        <base />
-    </backend>
-    <outbound>
-        <base />
-    </outbound>
-    <on-error>
-        <base />
-    </on-error>
+			<authentication-managed-identity resource="https://storage.azure.com/" />
+		</send-request>
+		<mock-response status-code="200" content-type="application/json" />
+	</inbound>
+	<backend>
+		<base />
+	</backend>
+	<outbound>
+		<base />
+	</outbound>
+	<on-error>
+		<base />
+	</on-error>
 </policies>
