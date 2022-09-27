@@ -134,7 +134,7 @@ resource "azurerm_api_management_api_operation" "get_op" {
   api_management_name = azurerm_api_management.apim.name
   resource_group_name   = azurerm_api_management.apim.resource_group_name
   display_name        = "Get a value"
-  method              = "GEY"
+  method              = "GET"
   url_template        = "/{key}/"
   template_parameter  {
     name = "key"
