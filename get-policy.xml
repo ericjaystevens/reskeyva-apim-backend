@@ -7,7 +7,7 @@
         }" />
 		<set-variable name="key" value="@((string)context.Request.MatchedParameters["key"])" />
 		<send-request mode="copy" response-variable-name="updateResponse">
-			<set-url>https://sareskeyva.table.core.windows.net/reskeyva(PartitionKey='1234')</set-url>
+			<set-url>https://sareskeyva.table.core.windows.net/reskeyva(PartitionKey='999999999999')</set-url>
 			<set-header name="x-ms-date" exists-action="override">
 				<value>@(DateTime.UtcNow.ToString("R"))</value>
 			</set-header>
