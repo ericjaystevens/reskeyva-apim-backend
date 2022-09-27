@@ -1,10 +1,6 @@
 <policies>
 	<inbound>
 		<base />
-		<set-variable name="req" value="@{
-            JObject body = context.Request.Body.As<JObject>(); 
-            return body["value"]; 
-        }" />
 		<set-variable name="key" value="@((string)context.Request.MatchedParameters["key"])" />
 		<send-request mode="copy" response-variable-name="updateResponse">
 			<set-url>https://sareskeyva.table.core.windows.net/reskeyva(PartitionKey='999999999999')</set-url>
