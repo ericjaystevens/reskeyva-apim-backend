@@ -67,6 +67,10 @@ data "template_file" "op_policy" {
   template = "${file("${path.module}/set-policy.xml")}"
 }
 
+data "template_file" "getop_policy" {
+  template = "${file("${path.module}/get-policy.xml")}"
+}
+
 resource "azurerm_api_management_api_operation" "op" {
   operation_id        = "set-value"
   api_name            = azurerm_api_management_api.api.name
@@ -122,4 +126,35 @@ resource "azurerm_role_assignment" "apim_table" {
   scope              = azurerm_storage_account.sa.id
   role_definition_name = "Storage Table Data Contributor"
   principal_id       = azurerm_api_management.apim.identity[0].principal_id
+}
+
+resource "azurerm_api_management_api_operation" "get_op" {
+  operation_id        = "get-value"
+  api_name            = azurerm_api_management_api.api.name
+  api_management_name = azurerm_api_management.apim.name
+  resource_group_name   = azurerm_api_management.apim.resource_group_name
+  display_name        = "Get a value"
+  method              = "GEY"
+  url_template        = "/{key}/"
+  template_parameter  {
+    name = "key"
+    required = true
+    type = "string"
+  }
+
+  description         = "get a key value"
+
+  response {
+    status_code = 200
+  } 
+}
+
+resource "azurerm_api_management_api_operation_policy" "get_policy" {
+  api_name            = azurerm_api_management_api_operation.get_op.api_name
+  api_management_name = azurerm_api_management_api_operation.get_op.api_management_name
+  resource_group_name = azurerm_api_management_api_operation.get_op.resource_group_name
+  operation_id        = azurerm_api_management_api_operation.get_op.operation_id
+
+  xml_content = data.template_file.getop_policy.rendered
+
 }

@@ -1,0 +1,36 @@
+<policies>
+	<inbound>
+		<base />
+		<set-variable name="req" value="@{
+            JObject body = context.Request.Body.As<JObject>(); 
+            return body["value"]; 
+        }" />
+		<set-variable name="key" value="@((string)context.Request.MatchedParameters["key"])" />
+		<send-request mode="new" response-variable-name="updateResponse">
+			<set-url>https://sareskeyva.table.core.windows.net/reskeyva(PartitionKey='1234')</set-url>
+			<set-header name="x-ms-date" exists-action="override">
+				<value>@(DateTime.UtcNow.ToString("R"))</value>
+			</set-header>
+			<set-header name="Content-Type" exists-action="override">
+				<value>application/json</value>
+			</set-header>
+			<set-header name="x-ms-version" exists-action="override">
+				<value>2020-04-08</value>
+			</set-header>
+			<set-header name="Accept" exists-action="override">
+				<value>application/json;odata=minimalmetadata</value>
+			</set-header>
+			<authentication-managed-identity resource="https://storage.azure.com/" />
+		</send-request>
+		<mock-response status-code="200" content-type="application/json" />
+	</inbound>
+	<backend>
+		<base />
+	</backend>
+	<outbound>
+		<base />
+	</outbound>
+	<on-error>
+		<base />
+	</on-error>
+</policies>
