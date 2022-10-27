@@ -3,7 +3,7 @@
 		<base />
 		<set-variable name="key" value="@((string)context.Request.MatchedParameters["key"])" />
 		<send-request mode="copy" response-variable-name="updateResponse">
-			<set-url>https://sareskeyva.table.core.windows.net/reskeyva(PartitionKey='999999999999')</set-url>
+			<set-url>https://sareskeyva.table.core.windows.net/reskeyva(PartitionKey='999999999999',RowKey='999999999999')</set-url>
 			<set-header name="x-ms-date" exists-action="override">
 				<value>@(DateTime.UtcNow.ToString("R"))</value>
 			</set-header>
@@ -18,7 +18,10 @@
 			</set-header>
 			<authentication-managed-identity resource="https://storage.azure.com/" />
 		</send-request>
-		<mock-response status-code="200" content-type="application/json" />
+			<set-body template="liquid">{
+				"value": "{{context.Variables["req"].body}}",
+			}
+			</set-body>
 	</inbound>
 	<backend>
 		<base />
